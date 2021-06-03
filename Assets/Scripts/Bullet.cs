@@ -7,7 +7,10 @@ public class Bullet : MonoBehaviour
 
     GameObject TargetObj;
     Vector3 offset;
+
     Transform tr;
+
+    public GameObject explosionEffect;
 
     bool isCollsion;
 
@@ -18,6 +21,7 @@ public class Bullet : MonoBehaviour
         TargetObj = null;
         isCollsion = false;
         offset = new Vector3(0, 0, 0);
+        tr = GetComponent<Transform>();
     }
 
     // Update is called once per frame
@@ -37,13 +41,15 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        tr.position = transform.position;
+
         if(other.tag == "Enemy")
         {
             TargetObj = GameObject.FindWithTag("Enemy");
             offset = TargetObj.transform.position - transform.position;
             isCollsion = true;
-            Destroy(gameObject,3);
-            Destroy(TargetObj, 3);
+            Invoke("explosion",3);
+
         }
 
         if(other.tag == "Wall")
@@ -51,26 +57,28 @@ public class Bullet : MonoBehaviour
             TargetObj = GameObject.FindWithTag("Enemy");
             offset = TargetObj.transform.position - transform.position;
             isCollsion = true;
-            ExpBarrel();
-            Destroy(gameObject, 3);
+            Invoke("explosion", 3);
         }
 
     }
 
-    void ExpBarrel()
+    private void explosion()
     {
-        //지정한 원점을 중심으로 10.0f 반경 내에 들어와 있는 Collider 객체 추출
-        Collider[] colls = Physics.OverlapSphere(tr.position, 1000.0f, 1 << 4);
+        Collider[] colls = Physics.OverlapSphere(tr.position, 10.0f);
 
         //추출한 Collider 객체에 폭발력 전달
         foreach (Collider coll in colls)
         {
             Rigidbody rbody = coll.GetComponent<Rigidbody>();
-            
-            rbody.mass = 1.0f;
-            rbody.AddExplosionForce(1000.0f, tr.position, 10.0f, 1300.0f);
- 
+            if (rbody != null)
+            {
+                rbody.mass = 1.0f;
+                rbody.AddExplosionForce(1000, tr.position, 10f);
+            }
         }
+        Instantiate(explosionEffect, tr.position, Quaternion.identity);
 
+        Destroy(gameObject);
     }
+
 }

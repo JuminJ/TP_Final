@@ -319,6 +319,8 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/VSSettingsProvider.ref.dll"
 "Assets/Scripts/Bullet.cs"
 "Assets/Scripts/cameraCtrl.cs"
+"Assets/Scripts/endPosition.cs"
+"Assets/Scripts/lineRenderer.cs"
 "Assets/Scripts/player.cs"
 -langversion:8.0
 

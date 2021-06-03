@@ -8,14 +8,17 @@ public class player : MonoBehaviour
     public GameObject Bullets;
     public Transform BulletPos;
 
+
     public float sensitivity = 500f; //감도 설정
     float rotationX = 0.0f;  //x축 회전값
     float rotationY = 0.0f;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -37,10 +40,12 @@ public class player : MonoBehaviour
         transform.eulerAngles = new Vector3(-rotationY, rotationX, 0.0f);
 
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonUp(0))
         {
             GameObject Bullet = Instantiate(Bullets,BulletPos.position,transform.localRotation);
 
         }
+
     }
+
 }
